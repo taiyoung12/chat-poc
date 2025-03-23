@@ -5,8 +5,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.stereotype.Repository;
+
 import us.zep.chatserver.entity.UserChatRoom;
 
+@Repository
 public class ChatRoomUserRepository {
 	private final Set<UserChatRoom> userChatRooms = ConcurrentHashMap.newKeySet();
 
