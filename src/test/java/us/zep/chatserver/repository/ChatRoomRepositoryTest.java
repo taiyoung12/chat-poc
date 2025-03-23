@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import us.zep.chatserver.common.exception.BaseException;
 import us.zep.chatserver.entity.ChatRoom;
+import us.zep.chatserver.repository.chatroom.ChatRoomRepository;
 
 public class ChatRoomRepositoryTest {
 	private final ChatRoomRepository sut = new ChatRoomRepository();

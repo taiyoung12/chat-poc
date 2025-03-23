@@ -1,4 +1,4 @@
-package us.zep.chatserver.repository;
+package us.zep.chatserver.repository.chatroom;
 
 import static us.zep.chatserver.common.code.ChatRoomCode.*;
 

@@ -1,6 +1,5 @@
 package us.zep.chatserver.service.chatroom;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -9,9 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import us.zep.chatserver.common.exception.BaseException;
 import us.zep.chatserver.entity.ChatRoom;
-import us.zep.chatserver.repository.ChatRoomRepository;
+import us.zep.chatserver.repository.chatroom.ChatRoomRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class ChatRoomCreatorTest {
