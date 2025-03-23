@@ -1,4 +1,4 @@
-package us.zep.chatserver.repository;
+package us.zep.chatserver.repository.chatroom;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.junit.jupiter.api.Assertions.*;
