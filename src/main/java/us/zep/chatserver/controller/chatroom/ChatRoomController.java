@@ -20,13 +20,8 @@ public class ChatRoomController {
 
     @PostMapping("/rooms")
     public Response<ChatRoomCreateResponse> createRoom(@RequestParam String name) {
-        ChatRoom chatRoom = chatRoomCreator.by(name);
-        return Response.success(
-            new ChatRoomCreateResponse(
-                chatRoom.getId(),
-                chatRoom.getName()
-            )
-        );
+		ChatRoomCreateResponse response = chatRoomCreator.by(name);
+        return Response.success(response);
     }
 
     @GetMapping("/rooms")

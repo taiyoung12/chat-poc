@@ -2,6 +2,7 @@ package us.zep.chatserver.service.chatroom;
 
 import org.springframework.stereotype.Service;
 
+import us.zep.chatserver.controller.chatroom.ChatRoomCreateResponse;
 import us.zep.chatserver.entity.ChatRoom;
 import us.zep.chatserver.repository.ChatRoomRepository;
 
@@ -13,7 +14,11 @@ public class ChatRoomCreator {
 		this.chatRoomRepository = chatRoomRepository;
 	}
 
-	public ChatRoom by(String name){
-		return chatRoomRepository.createRoom(name);
+	public ChatRoomCreateResponse by(String name){
+		ChatRoom chatRoom = chatRoomRepository.createRoom(name);
+		return new ChatRoomCreateResponse(
+			chatRoom.getId(),
+			chatRoom.getName()
+		);
 	}
 }
