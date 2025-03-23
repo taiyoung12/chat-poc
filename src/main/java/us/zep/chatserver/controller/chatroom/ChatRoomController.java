@@ -1,10 +1,11 @@
 package us.zep.chatserver.controller.chatroom;
 
+import static us.zep.chatserver.common.code.ChatRoomCode.*;
+
 import org.springframework.web.bind.annotation.*;
 
 import us.zep.chatserver.common.response.Response;
 import us.zep.chatserver.dto.ChatRoomInfo;
-import us.zep.chatserver.entity.ChatRoom;
 import us.zep.chatserver.service.chatroom.ChatRoomCreator;
 import us.zep.chatserver.service.chatroomuser.ChatRoomUserCreator;
 
@@ -30,6 +31,15 @@ public class ChatRoomController {
 		chatRoomUserCreator.by(userId, response.getId());
         return Response.success(response);
     }
+
+	@PostMapping("/rooms/join")
+	public Response<Void> joinRoom(
+		@RequestHeader("User-Id") String userId,
+		@RequestBody() String roomId
+	){
+		chatRoomUserCreator.by(userId, roomId);
+		return Response.success(SUCCESS_ADD_USER_TO_ROOM);
+	}
 
     @GetMapping("/rooms")
     public List<ChatRoomInfo> getRooms() {
