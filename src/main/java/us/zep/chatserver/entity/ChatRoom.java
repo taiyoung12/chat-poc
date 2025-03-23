@@ -10,21 +10,17 @@ public class ChatRoom {
 	private LocalDateTime createdAt;
 
 	public ChatRoom() {
-		this.id = generateId();
+		this.id = UUIDGenerator.generate();
 		this.createdAt = LocalDateTime.now();
 	}
 
 	public ChatRoom(String roomName) {
-		this.id = generateId();
+		this.id = UUIDGenerator.generate();
 		this.roomName = roomName;
 		this.createdAt = LocalDateTime.now();
 	}
 
 	public String getName(){
 		return roomName;
-	}
-
-	private String generateId(){
-		return UUIDGenerator.generate();
 	}
 }

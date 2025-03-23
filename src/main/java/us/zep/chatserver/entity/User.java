@@ -11,7 +11,7 @@ public class User {
 	}
 
 	public User(String name, String email) {
-		this.id = generateId();
+		this.id = UUIDGenerator.generate();
 		this.name = name;
 		this.email = email;
 	}
@@ -22,9 +22,5 @@ public class User {
 
 	public String getEmail(){
 		return email;
-	}
-
-	private String generateId(){
-		return UUIDGenerator.generate();
 	}
 }
