@@ -5,9 +5,11 @@ import static us.zep.chatserver.common.code.ChatRoomCode.*;
 import org.springframework.web.bind.annotation.*;
 
 import us.zep.chatserver.common.response.Response;
-import us.zep.chatserver.dto.ChatRoomInfo;
+import us.zep.chatserver.controller.chatroom.request.RoomIdRequest;
+import us.zep.chatserver.controller.chatroom.response.ChatRoomCreateResponse;
 import us.zep.chatserver.service.chatroom.ChatRoomCreator;
 import us.zep.chatserver.service.chatroomuser.ChatRoomUserCreator;
+import us.zep.chatserver.service.chatroomuser.ChatRoomUserReader;
 
 import java.util.List;
 
@@ -17,9 +19,13 @@ public class ChatRoomController {
     private final ChatRoomCreator chatRoomCreator;
 	private final ChatRoomUserCreator chatRoomUserCreator;
 
-	public ChatRoomController(ChatRoomCreator chatRoomCreator, ChatRoomUserCreator chatRoomUserCreator) {
+	private final ChatRoomUserReader chatRoomUserReader;
+
+	public ChatRoomController(ChatRoomCreator chatRoomCreator, ChatRoomUserCreator chatRoomUserCreator,
+		ChatRoomUserReader chatRoomUserReader) {
 		this.chatRoomCreator = chatRoomCreator;
 		this.chatRoomUserCreator = chatRoomUserCreator;
+		this.chatRoomUserReader = chatRoomUserReader;
 	}
 
     @PostMapping("/rooms")
@@ -35,14 +41,17 @@ public class ChatRoomController {
 	@PostMapping("/rooms/join")
 	public Response<Void> joinRoom(
 		@RequestHeader("User-Id") String userId,
-		@RequestBody() String roomId
+		@RequestBody RoomIdRequest roomIdRequest
 	){
-		chatRoomUserCreator.by(userId, roomId);
+		chatRoomUserCreator.by(userId, roomIdRequest.getRoomId());
 		return Response.success(SUCCESS_ADD_USER_TO_ROOM);
 	}
 
     @GetMapping("/rooms")
-    public List<ChatRoomInfo> getRooms() {
-        return null;
+    public Response<List<String>> getRooms(
+		@RequestParam String roomId
+	) {
+		List<String> response = chatRoomUserReader.findByRoomId(roomId);
+        return Response.success(response);
     }
 }

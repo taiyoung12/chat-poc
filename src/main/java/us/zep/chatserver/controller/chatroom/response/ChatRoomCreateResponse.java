@@ -1,4 +1,4 @@
-package us.zep.chatserver.controller.chatroom;
+package us.zep.chatserver.controller.chatroom.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
