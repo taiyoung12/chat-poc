@@ -1,23 +1,34 @@
 package us.zep.chatserver.controller.chatroom;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import us.zep.chatserver.common.response.Response;
 import us.zep.chatserver.dto.ChatRoomInfo;
+import us.zep.chatserver.entity.ChatRoom;
+import us.zep.chatserver.service.chatroom.ChatRoomCreator;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/chat")
-@RequiredArgsConstructor
 public class ChatRoomController {
+    private final ChatRoomCreator chatRoomCreator;
 
-    // TODO: 채팅방 생성
+	public ChatRoomController(ChatRoomCreator chatRoomCreator) {
+		this.chatRoomCreator = chatRoomCreator;
+	}
+
     @PostMapping("/rooms")
-    public String createRoom(@RequestParam String name) {
-        return null;
+    public Response<ChatRoomCreateResponse> createRoom(@RequestParam String name) {
+        ChatRoom chatRoom = chatRoomCreator.by(name);
+        return Response.success(
+            new ChatRoomCreateResponse(
+                chatRoom.getId(),
+                chatRoom.getName()
+            )
+        );
     }
 
-    // TODO: 현재 존재하는 채팅방 목록 조회
     @GetMapping("/rooms")
     public List<ChatRoomInfo> getRooms() {
         return null;
