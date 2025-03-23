@@ -16,12 +16,10 @@ public class ChatRoomTest {
 
 	@ParameterizedTest
 	@ValueSource(strings = {"단체방", "1:1채팅"})
-	void chatRoom_파라미터_생성자로_생성할_수_있다(String roomName){
-		ChatRoom actual = new ChatRoom(
-			roomName = roomName
-		);
+	void chatRoom_파라미터_생성자로_생성할_수_있다(String name){
+		ChatRoom actual = new ChatRoom(name);
 
 		assertThat(actual).isNotNull();
-		assertThat(actual.getName()).isEqualTo(roomName);
+		assertThat(actual.getName()).isEqualTo(name);
 	}
 }
