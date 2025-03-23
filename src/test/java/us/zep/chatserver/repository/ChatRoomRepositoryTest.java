@@ -14,7 +14,7 @@ public class ChatRoomRepositoryTest {
 	@Test
 	void 채팅방을_생성할_수_있다(){
 		String name = "단체방";
-		ChatRoom actual = sut.createRoom(name);
+		ChatRoom actual = sut.save(name);
 
 		assertThat(actual.getName()).isEqualTo(name);
 	}
@@ -24,7 +24,7 @@ public class ChatRoomRepositoryTest {
 		String emptyString = "";
 
 		assertThrows(BaseException.class, () -> {
-			sut.createRoom(emptyString);
+			sut.save(emptyString);
 		});
 	}
 
@@ -33,7 +33,7 @@ public class ChatRoomRepositoryTest {
 		String blankString = "     ";
 
 		assertThrows(BaseException.class, () -> {
-			sut.createRoom(blankString);
+			sut.save(blankString);
 		});
 	}
 }

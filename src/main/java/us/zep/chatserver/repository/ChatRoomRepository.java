@@ -14,7 +14,7 @@ import us.zep.chatserver.entity.ChatRoom;
 public class ChatRoomRepository {
 	private final Map<String, ChatRoom> chatRooms = new ConcurrentHashMap<>();
 
-	public ChatRoom createRoom(String name){
+	public ChatRoom save(String name){
 		if (name.isEmpty() || name.isBlank()){
 			throw new BaseException(INVALID_ROOM_NAME_INPUT);
 		}

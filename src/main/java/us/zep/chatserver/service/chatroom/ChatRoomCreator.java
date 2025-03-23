@@ -15,7 +15,7 @@ public class ChatRoomCreator {
 	}
 
 	public ChatRoomCreateResponse by(String name){
-		ChatRoom chatRoom = chatRoomRepository.createRoom(name);
+		ChatRoom chatRoom = chatRoomRepository.save(name);
 		return new ChatRoomCreateResponse(
 			chatRoom.getId(),
 			chatRoom.getName()
