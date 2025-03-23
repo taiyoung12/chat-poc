@@ -1,4 +1,4 @@
-package us.zep.chatserver.controller;
+package us.zep.chatserver.controller.chatroom;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +9,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/chat")
 @RequiredArgsConstructor
-public class ChatController {
+public class ChatRoomController {
 
     // TODO: 채팅방 생성
     @PostMapping("/rooms")
