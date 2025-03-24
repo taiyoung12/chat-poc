@@ -23,4 +23,12 @@ public class ChatRoomUserReader {
 			.map(UserChatRoom::getUserId)
 			.collect(Collectors.toList());
 	}
+
+	public List<String> findByUserId(String userId){
+		List<UserChatRoom> userChatRooms = chatRoomUserRepository.findByUserId(userId);
+
+		return userChatRooms.stream()
+			.map(UserChatRoom::getChatRoomId)
+			.collect(Collectors.toList());
+	}
 }

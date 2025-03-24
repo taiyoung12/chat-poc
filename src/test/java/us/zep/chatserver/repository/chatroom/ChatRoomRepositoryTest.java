@@ -1,13 +1,14 @@
 package us.zep.chatserver.repository.chatroom;
 
-import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import us.zep.chatserver.common.exception.BaseException;
 import us.zep.chatserver.entity.ChatRoom;
-import us.zep.chatserver.repository.chatroom.ChatRoomRepository;
 
 public class ChatRoomRepositoryTest {
 	private final ChatRoomRepository sut = new ChatRoomRepository();
@@ -36,5 +37,26 @@ public class ChatRoomRepositoryTest {
 		assertThrows(BaseException.class, () -> {
 			sut.save(blankString);
 		});
+	}
+
+	@Test
+	void 채팅방을_조회할_수_있다() {
+		ChatRoom room1 = sut.save("방1");
+		ChatRoom room2 = sut.save("방2");
+		ChatRoom room3 = sut.save("방3");
+
+		List<String> searchIds = List.of(room1.getId(), room2.getId());
+		List<ChatRoom> foundRooms = sut.findBy(searchIds);
+
+		assertThat(foundRooms)
+			.hasSize(2)
+			.extracting(ChatRoom::getId)
+			.containsExactlyInAnyOrder(room1.getId(), room2.getId());
+	}
+
+	@Test
+	void List가_비어있을_때_empty를_반화할_수_있다() {
+		List<ChatRoom> foundRooms = sut.findBy(List.of());
+		assertThat(foundRooms).isEmpty();
 	}
 }

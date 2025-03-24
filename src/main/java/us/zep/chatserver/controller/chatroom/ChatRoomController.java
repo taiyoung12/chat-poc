@@ -8,6 +8,7 @@ import us.zep.chatserver.common.response.Response;
 import us.zep.chatserver.controller.chatroom.request.RoomIdRequest;
 import us.zep.chatserver.controller.chatroom.response.ChatRoomCreateResponse;
 import us.zep.chatserver.service.chatroom.ChatRoomCreator;
+import us.zep.chatserver.service.chatroom.ChatRoomReader;
 import us.zep.chatserver.service.chatroomuser.ChatRoomUserCreator;
 import us.zep.chatserver.service.chatroomuser.ChatRoomUserReader;
 
@@ -21,11 +22,14 @@ public class ChatRoomController {
 
 	private final ChatRoomUserReader chatRoomUserReader;
 
+	private final ChatRoomReader chatRoomReader;
+
 	public ChatRoomController(ChatRoomCreator chatRoomCreator, ChatRoomUserCreator chatRoomUserCreator,
-		ChatRoomUserReader chatRoomUserReader) {
+		ChatRoomUserReader chatRoomUserReader, ChatRoomReader chatRoomReader) {
 		this.chatRoomCreator = chatRoomCreator;
 		this.chatRoomUserCreator = chatRoomUserCreator;
 		this.chatRoomUserReader = chatRoomUserReader;
+		this.chatRoomReader = chatRoomReader;
 	}
 
     @PostMapping("/rooms")
@@ -48,10 +52,19 @@ public class ChatRoomController {
 	}
 
     @GetMapping("/rooms")
-    public Response<List<String>> getRooms(
+    public Response<List<String>> getUserIdsBy(
 		@RequestParam String roomId
 	) {
 		List<String> response = chatRoomUserReader.findByRoomId(roomId);
         return Response.success(response);
     }
+
+	@GetMapping("/rooms/me")
+	public Response<List<String>> getRoomsId(
+		@RequestHeader("User-Id") String userId
+	) {
+		List<String> roomIds = chatRoomUserReader.findByUserId(userId);
+		List<String> response = chatRoomReader.findBy(roomIds);
+		return Response.success(response);
+	}
 }
