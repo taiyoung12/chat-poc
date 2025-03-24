@@ -9,6 +9,8 @@ services:
       - REDIS_PASSWORD=zep1234
     volumes:
       - zep-redis-data:/data
+    ports:
+      - "6379:6379"
 
 volumes:
   zep-redis-data:
