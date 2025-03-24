@@ -1,5 +1,7 @@
 package us.zep.chatserver.redis;
 
+import static us.zep.chatserver.common.code.RedisCode.*;
+
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import us.zep.chatserver.common.exception.BaseException;
 import us.zep.chatserver.model.ChatMessage;
 
 @Component
@@ -29,7 +32,7 @@ public class RedisSubscriber implements MessageListener {
 			ChatMessage chatMessage = objectMapper.readValue(body, ChatMessage.class);
 			messagingTemplate.convertAndSend("/topic/room/" + chatMessage.getRoomId(), chatMessage);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new BaseException(SUBSCRIBE_MESSAGE_SERIALIZATION_ERROR);
 		}
 	}
 
