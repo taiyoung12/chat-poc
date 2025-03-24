@@ -1,5 +1,7 @@
 package us.zep.chatserver.service.chat;
 
+import static us.zep.chatserver.model.ChatMessage.*;
+
 import org.springframework.stereotype.Service;
 
 import us.zep.chatserver.model.ChatMessage;
@@ -29,7 +31,7 @@ public class ChatMessageProcessor {
 			return false;
 		}
 
-		if ("JOIN".equals(chatMessage.getType())) {
+		if (MessageType.JOIN.equals(chatMessage.getType())) {
 			String userId = chatMessage.getSender();
 			String roomId = chatMessage.getRoomId();
 
@@ -50,7 +52,7 @@ public class ChatMessageProcessor {
 			return;
 		}
 
-		if ("LEAVE".equals(chatMessage.getType())) {
+		if (MessageType.LEAVE.equals(chatMessage.getType())) {
 			String userId = chatMessage.getSender();
 			String roomId = chatMessage.getRoomId();
 
