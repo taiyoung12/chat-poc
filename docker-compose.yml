@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis:7.2.3-alpine
+    container_name: redis-zep-chat
+    command: redis-server --requirepass zep1234
+    environment:
+      - REDIS_PASSWORD=zep1234
+    volumes:
+      - zep-redis-data:/data
+
+volumes:
+  zep-redis-data:
