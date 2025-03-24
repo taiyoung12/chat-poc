@@ -12,6 +12,8 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import us.zep.chatserver.redis.RedisSubscriber;
+
 @Configuration
 public class RedisConfig {
 
@@ -42,5 +44,27 @@ public class RedisConfig {
 		template.setHashValueSerializer(new StringRedisSerializer());
 		template.afterPropertiesSet();
 		return template;
+	}
+	@Bean
+	public ChannelTopic topic(){
+		return new ChannelTopic("chatroom");
+	}
+
+
+	@Bean
+	public RedisMessageListenerContainer container(
+		RedisConnectionFactory connectionFactory,
+		MessageListenerAdapter listenerAdapter,
+		ChannelTopic topic
+	) {
+		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+		container.setConnectionFactory(connectionFactory);
+		container.addMessageListener(listenerAdapter, topic);
+		return container;
+	}
+
+	@Bean
+	public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) {
+		return new MessageListenerAdapter(subscriber, "onMessage");
 	}
 }
