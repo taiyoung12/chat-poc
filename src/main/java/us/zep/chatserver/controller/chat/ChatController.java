@@ -32,7 +32,7 @@ public class ChatController {
 	}
 
 	@MessageMapping("/chat.leaveUser")
-	public void leaveUser(@Payload ChatMessage chatMessage){
-		chatMessageProcessor.processUserLeave(chatMessage);
+	public void leaveUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
+		chatMessageProcessor.processUserLeave(chatMessage, headerAccessor);
 	}
 }

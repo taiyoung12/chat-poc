@@ -3,11 +3,15 @@ package us.zep.chatserver.service.chat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.security.Principal;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
 import us.zep.chatserver.model.ChatMessage;
 import us.zep.chatserver.model.ChatMessage.MessageType;
@@ -23,13 +27,28 @@ public class ChatMessageProcessorTest {
 	@Mock
 	private UserRoomHistoryRepository userRoomHistoryRepository;
 
+	@Mock
+	private SimpMessageSendingOperations messagingTemplate;
+
+	@Mock
+	private SimpMessageHeaderAccessor headerAccessor;
+
+
+	@Mock
+	private Principal principal;
+
+
 	private ChatMessageProcessor sut;
 
 	private ChatMessage chatMessage;
 
 	@BeforeEach
 	void setUp() {
-		sut = new ChatMessageProcessor(redisPublisher, userRoomHistoryRepository);
+		sut = new ChatMessageProcessor(
+			redisPublisher,
+			userRoomHistoryRepository,
+			messagingTemplate
+		);
 
 		chatMessage = new ChatMessage();
 		chatMessage.setSender("testUser");
@@ -84,11 +103,14 @@ public class ChatMessageProcessorTest {
 	@Test
 	void 사용자_퇴장시_입장_이력이_삭제되고_메시지가_발행될_수_있다() {
 		chatMessage.setType(MessageType.LEAVE);
+		when(headerAccessor.getUser()).thenReturn(principal);
+		when(principal.getName()).thenReturn("testUser");
 
-		sut.processUserLeave(chatMessage);
+		sut.processUserLeave(chatMessage, headerAccessor);
 
 		verify(userRoomHistoryRepository, times(1)).removeRoomEntry("testUser", "room123");
 		verify(redisPublisher, times(1)).publish(chatMessage);
+		verify(messagingTemplate).convertAndSendToUser("testUser", "/queue/disconnect", "DISCONNECT");
 	}
 
 	@Test
@@ -96,7 +118,7 @@ public class ChatMessageProcessorTest {
 		chatMessage.setType(MessageType.LEAVE);
 		chatMessage.setSender(null);
 
-		sut.processUserLeave(chatMessage);
+		sut.processUserLeave(chatMessage, headerAccessor);
 
 		verify(userRoomHistoryRepository, never()).removeRoomEntry(anyString(), anyString());
 	}
@@ -106,7 +128,7 @@ public class ChatMessageProcessorTest {
 		chatMessage.setType(MessageType.LEAVE);
 		chatMessage.setRoomId(null);
 
-		sut.processUserLeave(chatMessage);
+		sut.processUserLeave(chatMessage, headerAccessor);
 
 		verify(userRoomHistoryRepository, never()).removeRoomEntry(anyString(), anyString());
 	}
