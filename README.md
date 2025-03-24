@@ -88,7 +88,7 @@ docker-compose up -d redis
 ```
 
 ### 3. **클라이언트 접속**
-- 웹 브라우저를 열고 다음 URL로 접속하세요: http://localhost:8080/chat.html
+- 웹 브라우저를 열고 다음 URL로 (해당 URL로 여러개의 탭을 열어주세요.) 접속하세요 : http://localhost:8080/chat.html
 
 ### 4. **사용 시나리오**
 
@@ -109,7 +109,7 @@ docker-compose up -d redis
 
 ---
 
-이 가이드를 따라 실행하면, Redis와 Spring Boot 서버가 실행된 상태에서 클라이언트 페이지(http://localhost:8080/chat.html)를 통해 사용자 로그인, 채팅방 생성 및 참여, 실시간 채팅 기능을 테스트할 수 있습니다.
+이 가이드를 따라 실행하면, Redis와 Spring Boot 서버가 실행된 상태에서 클라이언트 페이지(http://localhost:8080/chat.html) 를 통해 사용자 로그인, 채팅방 생성 및 참여, 실시간 채팅 기능을 테스트할 수 있습니다.
 
 
 ## 7.향후 개발 계획 및 개선 방향
