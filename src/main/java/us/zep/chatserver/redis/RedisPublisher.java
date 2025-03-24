@@ -1,5 +1,7 @@
 package us.zep.chatserver.redis;
 
+import static us.zep.chatserver.common.code.RedisCode.*;
+
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Component;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import us.zep.chatserver.common.exception.BaseException;
 import us.zep.chatserver.model.ChatMessage;
 
 @Component
@@ -21,11 +24,11 @@ public class RedisPublisher {
 	}
 
 	public void publish(ChatMessage message){
-		try{
+		try {
 			String json = objectMapper.writeValueAsString(message);
 			redisTemplate.convertAndSend(topic.getTopic(), json);
-		}catch (JsonProcessingException e){
-			e.printStackTrace();
+		} catch (JsonProcessingException e){
+			throw new BaseException(PUBLISH_MESSAGE_SERIALIZATION_ERROR);
 		}
 	}
 
