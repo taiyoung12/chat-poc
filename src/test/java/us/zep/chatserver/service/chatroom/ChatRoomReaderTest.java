@@ -11,7 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import us.zep.chatserver.controller.chatroom.response.ChatRoomReadReponse;
 import us.zep.chatserver.entity.ChatRoom;
 import us.zep.chatserver.repository.chatroom.ChatRoomRepository;
 
@@ -32,9 +34,19 @@ public class ChatRoomReaderTest {
 		ChatRoom room1 = new ChatRoom("room1");
 		ChatRoom room2 = new ChatRoom("room2");
 
+		ReflectionTestUtils.setField(room1, "id", "id1");
+		ReflectionTestUtils.setField(room2, "id", "id2");
+
 		when(repository.findBy(roomIds)).thenReturn(Arrays.asList(room1, room2));
 
-		List<String> names = sut.findBy(roomIds);
-		assertThat(names).containsExactlyInAnyOrder("room1", "room2");
+		List<ChatRoomReadReponse> responses = sut.findBy(roomIds);
+
+		assertThat(responses).hasSize(2);
+		assertThat(responses)
+			.extracting("roomId", "name")
+			.containsExactlyInAnyOrder(
+				tuple("id1", "room1"),
+				tuple("id2", "room2")
+			);
 	}
 }

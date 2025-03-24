@@ -178,15 +178,16 @@
                 if (data && data.code === "CM200" && Array.isArray(data.data)) {
                     const roomListElem = document.getElementById('my-room-list');
                     roomListElem.innerHTML = ''; // 기존 목록 초기화
-                    data.data.forEach(roomName => {
+                    data.data.forEach(room => {
                         const li = document.createElement('li');
-                        li.textContent = roomName;
-                        // 각 방에 "들어가기" 버튼 추가 (추가됨)
+                        li.textContent = room.name; // 방 이름 표시
+
+                        // 들어가기 버튼 추가
                         const joinBtn = document.createElement('button');
                         joinBtn.textContent = "들어가기";
                         joinBtn.onclick = function() {
-                            currentRoomId = roomName; // 여기서는 roomName을 roomId로 사용 (실제 설계에 맞게 조정)
-                            currentRoomName = roomName;
+                            currentRoomId = room.roomId; // roomId로 WebSocket 연결
+                            currentRoomName = room.name; // 방 이름 표시용
                             enterRoom();
                         };
                         li.appendChild(joinBtn);
@@ -209,6 +210,8 @@
         document.getElementById('room-section').style.display = 'none';
         document.getElementById('chat-section').style.display = 'block';
         document.getElementById('current-room-name').textContent = currentRoomName;
+        document.getElementById('messages').innerHTML = '';
+
         connectWebSocket();
     }
 
