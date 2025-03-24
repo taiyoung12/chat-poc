@@ -43,4 +43,24 @@ public class ChatRoomUserReaderTest {
 
 		verify(repository, times(1)).findByChatRoomId(roomId);
 	}
+
+	@Test
+	void 유저_ID로_참여_중인_방_ID_목록을_조회할_수_있다() {
+		String userId = "user1";
+
+		List<UserChatRoom> mockResult = List.of(
+			new UserChatRoom(userId, "room1"),
+			new UserChatRoom(userId, "room2"),
+			new UserChatRoom(userId, "room3")
+		);
+
+		when(repository.findByUserId(userId)).thenReturn(mockResult);
+
+		List<String> result = sut.findByUserId(userId);
+
+		assertThat(result).hasSize(3)
+			.containsExactlyInAnyOrder("room1", "room2", "room3");
+
+		verify(repository, times(1)).findByUserId(userId);
+	}
 }
