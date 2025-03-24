@@ -50,7 +50,6 @@
     <button onclick="fetchMyRooms()">내 방 조회</button>
     <ul id="my-room-list"></ul>
 </div>
-</div>
 
 <!-- 채팅 섹션 -->
 <div id="chat-section" class="section">
@@ -205,6 +204,8 @@
 
     // 채팅방 입장 처리 및 WebSocket 연결
     function enterRoom() {
+        document.getElementById('my-rooms-section').style.display = 'none';
+
         document.getElementById('room-section').style.display = 'none';
         document.getElementById('chat-section').style.display = 'block';
         document.getElementById('current-room-name').textContent = currentRoomName;
@@ -278,6 +279,8 @@
         }
         document.getElementById('chat-section').style.display = 'none';
         document.getElementById('room-section').style.display = 'block';
+        document.getElementById('my-rooms-section').style.display = 'block';
+
         currentRoomId = '';
         currentRoomName = '';
     }
