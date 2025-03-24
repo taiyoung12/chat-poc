@@ -227,6 +227,12 @@
                 displayMessage(msg.sender + ": " + msg.content);
             });
 
+            stompClient.subscribe('/user/queue/disconnect', function(message) {
+                console.log('서버로부터 연결 종료 요청 수신');
+                stompClient.disconnect();
+                console.log('WebSocket 연결 종료됨');
+            });
+
             // 참여 메시지 전송: 방에 입장했음을 알림
             const joinMsg = {
                 type: 'JOIN',
@@ -277,7 +283,7 @@
                 sender: currentUserName,
                 content: currentUserName + '님이 퇴장하였습니다.'
             };
-            stompClient.send('/app/chat.addUser', {}, JSON.stringify(leaveMsg));
+            stompClient.send('/app/chat.leaveUser', {}, JSON.stringify(leaveMsg));
             stompClient.disconnect();
         }
         document.getElementById('chat-section').style.display = 'none';

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
 import us.zep.chatserver.model.ChatMessage;
@@ -29,10 +28,6 @@ public class ChatMessageProcessorTest {
 
 	@Mock
 	private SimpMessageSendingOperations messagingTemplate;
-
-	@Mock
-	private SimpMessageHeaderAccessor headerAccessor;
-
 
 	@Mock
 	private Principal principal;
@@ -103,10 +98,8 @@ public class ChatMessageProcessorTest {
 	@Test
 	void 사용자_퇴장시_입장_이력이_삭제되고_메시지가_발행될_수_있다() {
 		chatMessage.setType(MessageType.LEAVE);
-		when(headerAccessor.getUser()).thenReturn(principal);
-		when(principal.getName()).thenReturn("testUser");
 
-		sut.processUserLeave(chatMessage, headerAccessor);
+		sut.processUserLeave(chatMessage);
 
 		verify(userRoomHistoryRepository, times(1)).removeRoomEntry("testUser", "room123");
 		verify(redisPublisher, times(1)).publish(chatMessage);
@@ -118,7 +111,7 @@ public class ChatMessageProcessorTest {
 		chatMessage.setType(MessageType.LEAVE);
 		chatMessage.setSender(null);
 
-		sut.processUserLeave(chatMessage, headerAccessor);
+		sut.processUserLeave(chatMessage);
 
 		verify(userRoomHistoryRepository, never()).removeRoomEntry(anyString(), anyString());
 	}
@@ -128,7 +121,7 @@ public class ChatMessageProcessorTest {
 		chatMessage.setType(MessageType.LEAVE);
 		chatMessage.setRoomId(null);
 
-		sut.processUserLeave(chatMessage, headerAccessor);
+		sut.processUserLeave(chatMessage);
 
 		verify(userRoomHistoryRepository, never()).removeRoomEntry(anyString(), anyString());
 	}

@@ -55,26 +55,22 @@ public class ChatMessageProcessor {
 	}
 
 	public void processUserLeave(
-		ChatMessage chatMessage,
-		SimpMessageHeaderAccessor headerAccessor
+		ChatMessage chatMessage
 	) {
 		if (chatMessage.getRoomId() == null || chatMessage.getSender() == null) {
 			return;
 		}
 
-		if (MessageType.LEAVE.equals(chatMessage.getType())) {
-			String userId = chatMessage.getSender();
-			String roomId = chatMessage.getRoomId();
+		String userId = chatMessage.getSender();
+		String roomId = chatMessage.getRoomId();
 
-			userRoomHistoryRepository.removeRoomEntry(userId, roomId);
-
-			messagingTemplate.convertAndSendToUser(
-				headerAccessor.getUser().getName(),
-				DISCONNECT_DESTINATION,
-				DISCONNECT_PAYLOAD
-			);
-		}
-
+		userRoomHistoryRepository.removeRoomEntry(userId, roomId);
 		redisPublisher.publish(chatMessage);
+
+		messagingTemplate.convertAndSendToUser(
+			userId,
+			DISCONNECT_DESTINATION,
+			DISCONNECT_PAYLOAD
+		);
 	}
 }

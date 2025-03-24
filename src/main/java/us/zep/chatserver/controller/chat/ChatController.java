@@ -6,7 +6,6 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
 import us.zep.chatserver.model.ChatMessage;
-import us.zep.chatserver.redis.RedisPublisher;
 import us.zep.chatserver.service.chat.ChatMessageProcessor;
 
 @Controller
@@ -32,7 +31,7 @@ public class ChatController {
 	}
 
 	@MessageMapping("/chat.leaveUser")
-	public void leaveUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
-		chatMessageProcessor.processUserLeave(chatMessage, headerAccessor);
+	public void leaveUser(@Payload ChatMessage chatMessage) {
+		chatMessageProcessor.processUserLeave(chatMessage);
 	}
 }
