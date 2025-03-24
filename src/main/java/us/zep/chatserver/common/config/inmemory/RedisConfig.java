@@ -17,6 +17,9 @@ import us.zep.chatserver.redis.RedisSubscriber;
 @Configuration
 public class RedisConfig {
 
+	private static final String REDIS_TOPIC = "chatroom";
+	private static final String MESSAGE_LISTENER_METHOD = "onMessage";
+
 	@Value("${spring.redis.host}")
 	private String redisHost;
 
@@ -48,7 +51,7 @@ public class RedisConfig {
 	}
 	@Bean
 	public ChannelTopic topic(){
-		return new ChannelTopic("chatroom");
+		return new ChannelTopic(REDIS_TOPIC);
 	}
 
 
@@ -66,6 +69,6 @@ public class RedisConfig {
 
 	@Bean
 	public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) {
-		return new MessageListenerAdapter(subscriber, "onMessage");
+		return new MessageListenerAdapter(subscriber, MESSAGE_LISTENER_METHOD);
 	}
 }

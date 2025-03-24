@@ -10,6 +10,8 @@ import us.zep.chatserver.redis.RedisPublisher;
 
 @Controller
 public class ChatController {
+	private static final String USER_KEY = "username";
+
 	private final RedisPublisher redisPublisher;
 
 	public ChatController(RedisPublisher redisPublisher) {
@@ -25,7 +27,7 @@ public class ChatController {
 
 	@MessageMapping("/chat.addUser")
 	public void addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor){
-		headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
+		headerAccessor.getSessionAttributes().put(USER_KEY, chatMessage.getSender());
 		if(chatMessage.getRoomId() != null) {
 			redisPublisher.publish(chatMessage);
 		}
