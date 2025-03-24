@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import us.zep.chatserver.controller.chatroom.response.ChatRoomReadReponse;
 import us.zep.chatserver.entity.ChatRoom;
 import us.zep.chatserver.repository.chatroom.ChatRoomRepository;
 
@@ -16,10 +17,10 @@ public class ChatRoomReader {
 		this.chatRoomRepository = chatRoomRepository;
 	}
 
-	public List<String> findBy(List<String> roomIds){
+	public List<ChatRoomReadReponse> findBy(List<String> roomIds){
 		return chatRoomRepository.findBy(roomIds)
 			.stream()
-			.map(ChatRoom::getName)
+			.map(chatRoom -> new ChatRoomReadReponse(chatRoom.getId(), chatRoom.getName()))
 			.collect(Collectors.toList());
 	}
 }
