@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import us.zep.chatserver.common.response.Response;
 import us.zep.chatserver.controller.chatroom.request.RoomIdRequest;
 import us.zep.chatserver.controller.chatroom.response.ChatRoomCreateResponse;
+import us.zep.chatserver.controller.chatroom.response.ChatRoomReadReponse;
 import us.zep.chatserver.service.chatroom.ChatRoomCreator;
 import us.zep.chatserver.service.chatroom.ChatRoomReader;
 import us.zep.chatserver.service.chatroomuser.ChatRoomUserCreator;
@@ -60,11 +61,11 @@ public class ChatRoomController {
     }
 
 	@GetMapping("/rooms/me")
-	public Response<List<String>> getRoomsId(
+	public Response<List<ChatRoomReadReponse>> getRoomsId(
 		@RequestHeader("User-Id") String userId
 	) {
 		List<String> roomIds = chatRoomUserReader.findByUserId(userId);
-		List<String> response = chatRoomReader.findBy(roomIds);
+		List<ChatRoomReadReponse> response = chatRoomReader.findBy(roomIds);
 		return Response.success(response);
 	}
 }
