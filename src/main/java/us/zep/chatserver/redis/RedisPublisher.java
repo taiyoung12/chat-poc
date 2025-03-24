@@ -2,12 +2,14 @@ package us.zep.chatserver.redis;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import us.zep.chatserver.model.ChatMessage;
 
+@Component
 public class RedisPublisher {
 	private final RedisTemplate<String, Object> redisTemplate;
 	private final ChannelTopic topic;
