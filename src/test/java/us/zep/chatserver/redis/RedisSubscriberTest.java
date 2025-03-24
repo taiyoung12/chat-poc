@@ -1,5 +1,6 @@
 package us.zep.chatserver.redis;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import us.zep.chatserver.common.exception.BaseException;
 import us.zep.chatserver.model.ChatMessage;
 
 @ExtendWith(MockitoExtension.class)
@@ -66,14 +68,13 @@ public class RedisSubscriberTest {
 	void 잘못된_형식의_메시지를_수신하면_예외를_처리할_수_있다() {
 		String invalidJson = "{invalid-json}";
 		byte[] messageBytes = invalidJson.getBytes();
-		byte[] patternBytes = "chat:room:단체방".getBytes();
 
 		when(message.getBody()).thenReturn(messageBytes);
 		when(stringRedisSerializer.deserialize(messageBytes)).thenReturn(invalidJson);
 
-		sut.onMessage(message, patternBytes);
-
-		verify(messagingTemplate, times(0)).convertAndSend(anyString(), any(Object.class));
+		assertThrows(BaseException.class, () -> {
+			sut.onMessage(message, new byte[0]);
+		});
 	}
 
 	@Test
@@ -114,8 +115,8 @@ public class RedisSubscriberTest {
 		when(message.getBody()).thenReturn(null);
 		when(stringRedisSerializer.deserialize(null)).thenReturn(null);
 
-		sut.onMessage(message, patternBytes);
-
-		verify(messagingTemplate, times(0)).convertAndSend(anyString(), any(Object.class));
+		assertThrows(BaseException.class, () -> {
+			sut.onMessage(message, patternBytes);
+		});
 	}
 }
