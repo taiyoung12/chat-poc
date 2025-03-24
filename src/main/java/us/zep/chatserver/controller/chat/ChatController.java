@@ -3,7 +3,6 @@ package us.zep.chatserver.controller.chat;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import us.zep.chatserver.model.ChatMessage;
@@ -18,9 +17,7 @@ public class ChatController {
 	}
 
 	@MessageMapping("/chat.sendMessage")
-	public void sendMessage(
-		@Payload ChatMessage chatMessage
-	){
+	public void sendMessage(@Payload ChatMessage chatMessage){
 		if(chatMessage.getRoomId() != null){
 			redisPublisher.publish(chatMessage);
 		}

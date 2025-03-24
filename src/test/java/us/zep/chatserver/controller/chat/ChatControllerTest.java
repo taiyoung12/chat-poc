@@ -7,11 +7,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import us.zep.chatserver.model.ChatMessage;
 import us.zep.chatserver.redis.RedisPublisher;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,9 +22,6 @@ public class ChatControllerTest {
 
 	@Mock
 	private RedisPublisher redisPublisher;
-
-	@Mock
-	private SimpMessagingTemplate messagingTemplate;
 
 	@Mock
 	private SimpMessageHeaderAccessor headerAccessor;
