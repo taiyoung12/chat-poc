@@ -13,7 +13,7 @@ import us.zep.chatserver.redis.RedisPublisher;
 public class ChatController {
 	private final RedisPublisher redisPublisher;
 
-	public ChatController(SimpMessagingTemplate messagingTemplate, RedisPublisher redisPublisher) {
+	public ChatController(RedisPublisher redisPublisher) {
 		this.redisPublisher = redisPublisher;
 	}
 
