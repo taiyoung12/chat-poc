@@ -1,2 +1,46 @@
-package us.zep.chatserver.common.config.inmemory;public class RedisConfig {
+package us.zep.chatserver.common.config.inmemory;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+@Configuration
+public class RedisConfig {
+
+	@Value("${spring.redis.host}")
+	private String redisHost;
+
+	@Value("${spring.redis.port}")
+	private int redisPort;
+
+	@Value("${spring.redis.password}")
+	private String redisPassword;
+
+	@Bean
+	public RedisConnectionFactory redisConnectionFactory() {
+		RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration();
+		redisConfig.setHostName(redisHost);
+		redisConfig.setPort(redisPort);
+		redisConfig.setPassword(redisPassword);
+		return new LettuceConnectionFactory(redisConfig);
+	}
+	@Bean
+	public org.springframework.data.redis.core.RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory){
+		RedisTemplate<String, Object> template = new RedisTemplate<>();
+		template.setConnectionFactory(redisConnectionFactory());
+		template.setKeySerializer(new StringRedisSerializer());
+		template.setValueSerializer(new StringRedisSerializer());
+		template.setHashKeySerializer(new StringRedisSerializer());
+		template.setHashValueSerializer(new StringRedisSerializer());
+		template.afterPropertiesSet();
+		return template;
+	}
 }
