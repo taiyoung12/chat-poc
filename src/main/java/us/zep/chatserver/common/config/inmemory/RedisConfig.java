@@ -34,6 +34,7 @@ public class RedisConfig {
 		redisConfig.setPassword(redisPassword);
 		return new LettuceConnectionFactory(redisConfig);
 	}
+
 	@Bean
 	public org.springframework.data.redis.core.RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory){
 		RedisTemplate<String, Object> template = new RedisTemplate<>();
