@@ -3,11 +3,14 @@ package us.zep.chatserver.service.chat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.security.Principal;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
 import us.zep.chatserver.model.ChatMessage;
 import us.zep.chatserver.model.ChatMessage.MessageType;
@@ -23,13 +26,24 @@ public class ChatMessageProcessorTest {
 	@Mock
 	private UserRoomHistoryRepository userRoomHistoryRepository;
 
+	@Mock
+	private SimpMessageSendingOperations messagingTemplate;
+
+	@Mock
+	private Principal principal;
+
+
 	private ChatMessageProcessor sut;
 
 	private ChatMessage chatMessage;
 
 	@BeforeEach
 	void setUp() {
-		sut = new ChatMessageProcessor(redisPublisher, userRoomHistoryRepository);
+		sut = new ChatMessageProcessor(
+			redisPublisher,
+			userRoomHistoryRepository,
+			messagingTemplate
+		);
 
 		chatMessage = new ChatMessage();
 		chatMessage.setSender("testUser");
@@ -89,6 +103,7 @@ public class ChatMessageProcessorTest {
 
 		verify(userRoomHistoryRepository, times(1)).removeRoomEntry("testUser", "room123");
 		verify(redisPublisher, times(1)).publish(chatMessage);
+		verify(messagingTemplate).convertAndSendToUser("testUser", "/queue/disconnect", "DISCONNECT");
 	}
 
 	@Test
