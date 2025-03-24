@@ -1,5 +1,6 @@
 package us.zep.chatserver.service.chat;
 
+import static us.zep.chatserver.common.config.websocket.WebSocketConstants.*;
 import static us.zep.chatserver.model.ChatMessage.*;
 
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -69,8 +70,8 @@ public class ChatMessageProcessor {
 
 			messagingTemplate.convertAndSendToUser(
 				headerAccessor.getUser().getName(),
-				"/queue/disconnect",
-				"DISCONNECT"
+				DISCONNECT_DESTINATION,
+				DISCONNECT_PAYLOAD
 			);
 		}
 
