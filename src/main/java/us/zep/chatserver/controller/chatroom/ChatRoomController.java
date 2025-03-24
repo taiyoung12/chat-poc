@@ -59,9 +59,9 @@ public class ChatRoomController {
         return Response.success(response);
     }
 
-	@GetMapping("/rooms")
+	@GetMapping("/rooms/me")
 	public Response<List<String>> getRoomsId(
-		@RequestParam String userId
+		@RequestHeader("User-Id") String userId
 	) {
 		List<String> roomIds = chatRoomUserReader.findByUserId(userId);
 		List<String> response = chatRoomReader.findBy(roomIds);
