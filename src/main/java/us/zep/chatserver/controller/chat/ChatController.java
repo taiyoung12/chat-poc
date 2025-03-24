@@ -21,9 +21,7 @@ public class ChatController {
 	public void sendMessage(
 		@Payload ChatMessage chatMessage
 	){
-		System.out.println("💬 채팅 수신: " + chatMessage.getSender() + " > " + chatMessage.getContent());
 		if(chatMessage.getRoomId() != null){
-			System.out.println(chatMessage);
 			redisPublisher.publish(chatMessage);
 		}
 	}
