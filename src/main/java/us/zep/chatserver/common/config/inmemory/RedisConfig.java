@@ -39,7 +39,7 @@ public class RedisConfig {
 	}
 
 	@Bean
-	public org.springframework.data.redis.core.RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory){
+	public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory){
 		RedisTemplate<String, Object> template = new RedisTemplate<>();
 		template.setConnectionFactory(redisConnectionFactory());
 		template.setKeySerializer(new StringRedisSerializer());
@@ -49,6 +49,7 @@ public class RedisConfig {
 		template.afterPropertiesSet();
 		return template;
 	}
+
 	@Bean
 	public ChannelTopic topic(){
 		return new ChannelTopic(REDIS_TOPIC);
